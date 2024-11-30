@@ -20,6 +20,20 @@ void readInput(ifstream& inputFile, int& n, int& m, vector<vector<int>>& operati
     inputFile >> result;
 }
 
+void printDpTable(const vector<vector<vector<int>>>& dpTable) {
+    // Imprimir a tabela dpTable para visualização
+    for (int i = 0; i < dpTable.size(); ++i) {
+        for (int j = 0; j < dpTable[i].size(); ++j) {
+            cout << "dpTable[" << i << "][" << j << "] = {";
+            for (int k = 0; k < dpTable[i][j].size(); ++k) {
+                cout << dpTable[i][j][k];
+                if (k != dpTable[i][j].size() - 1) cout << ", ";
+            }
+            cout << "}" << endl;
+        }
+    }
+}
+
 int main(int argc, char* argv[]) {
     ifstream inputFile(argv[1]);
     int n, m, result;
@@ -36,39 +50,39 @@ int main(int argc, char* argv[]) {
     }
 
     for (int diagonal = 1; diagonal < m; diagonal++) {
-        for (int lin = 0; lin < m - diagonal; lin++) {
+        for (int lin = 0; lin < m - diagonal; lin++) { // para cada celula
             int col = lin + diagonal;
-            for (int i = diagonal - 1; i >= 0; i--) {
-                vector<bool> buffer(m, false); // buffer ocupa espaço mas é mais rapido
-                int solution_counter = 0;
+            vector<bool> buffer(n, false); // buffer ocupa espaço mas é mais rapido
+            int solution_counter = 0;
+            for (int i = diagonal - 1; i >= 0; i--) { // para cada numero dentra celula
+                if (solution_counter == n) {
+                    break;
+                }
                 for (int leftResult : dpTable[lin][lin + i]) {
 
                     for (int rightResult : dpTable[lin + i + 1][col]) {
                         int result = operationTable[leftResult - 1][rightResult - 1];
-                        if (solution_counter == m) {
-                            break;
-                        }
                         if (buffer[result-1]) {
                             continue;
                         }
                         dpTable[lin][col].push_back(result);
-                        int close_bracket = 0;
+                        int close_bracket = 0; // nao feito TODO ????
                         dpTable[col][lin].push_back(close_bracket);
                         dpTable[col][lin].push_back(leftResult);
                         dpTable[col][lin].push_back(rightResult);
                         buffer[result-1] = true;
                         solution_counter++;
                     }
-                    
-                    if (solution_counter == m) {
-                        break;
-                    }
                 }
             }
         }
     }
 
+    printDpTable(dpTable);
+
+
     inputFile.close();  
     return 0;
 }
+
 
