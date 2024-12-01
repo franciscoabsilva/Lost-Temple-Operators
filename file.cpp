@@ -4,43 +4,44 @@
 using namespace std;
 
 void readInput(int n, int m, vector<vector<int>>& operationTable,
-               vector<int>& sequence, int& result) {
+               vector<int>& sequence, vector<vector<vector<int>>>& dpTable,
+               int& result) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             cin >> operationTable[i][j];
+
         }
     }
     for (int i = 0; i < m; i++) {
         cin >> sequence[i];
+        dpTable[i][i].push_back(sequence[i]);
     }
     cin >> result;
 }
 
-void buildExpression(const vector<vector<vector<int>>>& dpTable, int lin,
+void backtrack(const vector<vector<vector<int>>>& dpTable, int lin,
                      int col, int subResult, string& expression) {
+    // Caso base: célula diagonal principal, retorna o elemento
     if (lin == col) {
-        // Caso base: célula diagonal principal, retorna o elemento
         expression += to_string(dpTable[lin][col][0]);
         return;
     }
+
     int parenthesis, leftResult, rightResult;
     for(size_t i = 0; i < dpTable[lin][col].size(); i++) {
         if (dpTable[lin][col][i] == subResult) {
             parenthesis = dpTable[col][lin][3 * i]; 
-            leftResult = dpTable[col][lin][3 * i + 1];  // Segundo elemento: resultado da esquerda
-            rightResult = dpTable[col][lin][3 * i + 2]; // Terceiro elemento: resultado da direita
+            leftResult = dpTable[col][lin][3 * i + 1];
+            rightResult = dpTable[col][lin][3 * i + 2];
             
             expression += "(";
-            buildExpression(dpTable, lin, parenthesis, leftResult, expression); // Recursão para o lado esquerdo
+            backtrack(dpTable, lin, parenthesis, leftResult, expression); 
             expression += " ";
-            buildExpression(dpTable, parenthesis + 1, col, rightResult, expression); // Recursão para o lado direito
+            backtrack(dpTable, parenthesis + 1, col, rightResult, expression);
             expression += ")";
             break;
         }
-    }
-
-
-    
+    } 
 }
 
 int main() {
@@ -52,22 +53,19 @@ int main() {
 
     vector<vector<int>> operationTable(n, vector<int>(n));
     vector<int> sequence(m);
-
-    readInput(n, m, operationTable, sequence, result);
-
-    // posso criar isto dentro do readInput para nao correr 2 vezes o mesmo for TODO
     vector<vector<vector<int>>> dpTable(m, vector<vector<int>>(m)); 
-    for (int i = 0; i < m; i++) {
-        dpTable[i][i].push_back(sequence[i]);
-    }
+
+    readInput(n, m, operationTable, sequence, dpTable, result);
 
     for (int diagonal = 1; diagonal < m; diagonal++) {
         for (int lin = 0; lin < m - diagonal; lin++) { // para cada celula
             int col = lin + diagonal;
             vector<bool> buffer(n, false); // buffer ocupa espaço mas é mais rapido
-            int solutionCounter = 0; // isto podia ser um for loop ou while
+
             // provavelmente o solution counter ate podia sair se metessemos um vetor das solucoes
             // de tamanho maximo n (ou n*4) e q qnd chegasse ao fim do vetor parava
+            int solutionCounter = 0; // isto podia ser um for loop ou while
+
             for (int i = diagonal - 1; i >= 0; i--) { // para cada numero dentra celula
                 for (int leftResult : dpTable[lin][lin + i]) {
                     for (int rightResult : dpTable[lin + i + 1][col]) {
@@ -75,10 +73,12 @@ int main() {
                             break;
                         }
                         int subResult = operationTable[leftResult - 1][rightResult - 1];
-                        if (buffer[subResult-1]) {
+                        if (buffer[subResult - 1]) {
                             continue;
                         }
                         dpTable[lin][col].push_back(subResult);
+
+                        // infos necessarias para backtrack
                         int closeBracket = lin + i;
                         dpTable[col][lin].push_back(closeBracket);
                         dpTable[col][lin].push_back(leftResult);
@@ -100,14 +100,16 @@ int main() {
             found = true;
             cout << "1" << endl;
             string expression;
-            buildExpression(dpTable, 0, m - 1, result, expression);
+            backtrack(dpTable, 0, m - 1, result, expression);
             cout << expression << endl;
             break;
         }
     }
+
     if (!found) {
         cout << "0" << endl;
     }
+    
     return 0; 
 }
 
