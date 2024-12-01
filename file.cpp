@@ -29,17 +29,15 @@ void buildExpression(const vector<vector<vector<int>>>& dpTable, int lin,
         return;
     }
     int parenthesis, leftResult, rightResult;
-    for(std::size_t i = 0; i < dpTable[lin][col].size(); i++) {
+    for(size_t i = 0; i < dpTable[lin][col].size(); i++) {
         if (dpTable[lin][col][i] == subResult) {
             parenthesis = dpTable[col][lin][3 * i]; 
             leftResult = dpTable[col][lin][3 * i + 1];  // Segundo elemento: resultado da esquerda
             rightResult = dpTable[col][lin][3 * i + 2]; // Terceiro elemento: resultado da direita
-            // Adiciona parêntese esquerdo
+            
             expression += "(";
             buildExpression(dpTable, lin, parenthesis, leftResult, expression); // Recursão para o lado esquerdo
             expression += " ";
-            // Adiciona parêntese direito
-            expression += "";
             buildExpression(dpTable, parenthesis + 1, col, rightResult, expression); // Recursão para o lado direito
             expression += ")";
             break;
@@ -99,7 +97,7 @@ int main(int argc, char* argv[]) {
     }
 
     bool found = false;
-    for (std::size_t final = 0; final < dpTable[0][m - 1].size(); final++) {
+    for (size_t final = 0; final < dpTable[0][m - 1].size(); final++) {
         if (dpTable[0][m - 1][final] == result) {
             found = true;
             cout << "1" << endl;
