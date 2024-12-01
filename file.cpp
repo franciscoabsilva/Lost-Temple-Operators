@@ -1,24 +1,19 @@
 #include <iostream>
-#include <fstream>
 #include <vector>
 
 using namespace std;
 
-void readInput(ifstream& inputFile, int& n, int& m, vector<vector<int>>& operationTable,
+void readInput(int n, int m, vector<vector<int>>& operationTable,
                vector<int>& sequence, int& result) {
-    inputFile >> n >> m;
-    operationTable.resize(n, vector<int>(n));
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            inputFile >> operationTable[i][j];
+            cin >> operationTable[i][j];
         }
     }
-    sequence.resize(m);  
     for (int i = 0; i < m; i++) {
-        inputFile >> sequence[i];
+        cin >> sequence[i];
     }
-    inputFile >> result;
-    inputFile.close();  
+    cin >> result;
 }
 
 void buildExpression(const vector<vector<vector<int>>>& dpTable, int lin,
@@ -48,14 +43,17 @@ void buildExpression(const vector<vector<vector<int>>>& dpTable, int lin,
     
 }
 
-int main(int argc, char* argv[]) {
-    ifstream inputFile(argv[1]);
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    
     int n, m, result;
-    // ???? ver se o recise nao é mais lento
-    vector<vector<int>> operationTable;
-    vector<int> sequence;
+    cin >> n >> m;
 
-    readInput(inputFile, n, m, operationTable, sequence, result);
+    vector<vector<int>> operationTable(n, vector<int>(n));
+    vector<int> sequence(m);
+
+    readInput(n, m, operationTable, sequence, result);
 
     // posso criar isto dentro do readInput para nao correr 2 vezes o mesmo for TODO
     vector<vector<vector<int>>> dpTable(m, vector<vector<int>>(m)); 
