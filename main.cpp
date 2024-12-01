@@ -53,36 +53,49 @@ int main(int argc, char* argv[]) {
         for (int lin = 0; lin < m - diagonal; lin++) { // para cada celula
             int col = lin + diagonal;
             vector<bool> buffer(n, false); // buffer ocupa espaço mas é mais rapido
-            int solution_counter = 0;
+            int solutionCounter = 0; // isto podia ser um for loop ou while
+            // provavelmente o solution counter ate podia sair se metessemos um vetor das solucoes
+            // de tamanho maximo n (ou n*4) e q qnd chegasse ao fim do vetor parava
             for (int i = diagonal - 1; i >= 0; i--) { // para cada numero dentra celula
-                if (solution_counter == n) {
-                    break;
-                }
                 for (int leftResult : dpTable[lin][lin + i]) {
-
                     for (int rightResult : dpTable[lin + i + 1][col]) {
-                        int result = operationTable[leftResult - 1][rightResult - 1];
-                        if (buffer[result-1]) {
+                        if (solutionCounter == n) {
+                            break;
+                        }
+                        int subResult = operationTable[leftResult - 1][rightResult - 1];
+                        if (buffer[subResult-1]) {
                             continue;
                         }
-                        dpTable[lin][col].push_back(result);
-                        int close_bracket = 0; // nao feito TODO ????
-                        dpTable[col][lin].push_back(close_bracket);
+                        dpTable[lin][col].push_back(subResult);
+                        int closeBracket = col; // nao feito TODO ????
+                        dpTable[col][lin].push_back(closeBracket);
                         dpTable[col][lin].push_back(leftResult);
                         dpTable[col][lin].push_back(rightResult);
-                        buffer[result-1] = true;
-                        solution_counter++;
+                        buffer[subResult-1] = true;
+                        solutionCounter++;
+                    }
+                    if (solutionCounter == n) {
+                        break;
                     }
                 }
             }
         }
     }
-
     printDpTable(dpTable);
-
+    bool found = false;
+    for (int final : dpTable[0][m-1]) {
+        if (final == result) {
+            found = true;
+            printf("1\n");
+            break;
+        }
+    }
+    if (!found) {
+        printf("0\n");
+    }
 
     inputFile.close();  
-    return 0;
+    return 0; 
 }
 
 
