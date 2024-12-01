@@ -38,11 +38,6 @@ void buildExpression(const vector<vector<vector<int>>>& dpTable, int lin,
         }
     }
 
-        cout << "parenthesis: " << parenthesis << endl;
-    cout << "leftResult: " << leftResult << endl;
-    cout << "rightResult: " << rightResult << endl;
-
-
     // Adiciona parêntese esquerdo
     expression += "(";
     buildExpression(dpTable, lin, parenthesis, leftResult, expression); // Recursão para o lado esquerdo
@@ -117,7 +112,7 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-    printDpTable(dpTable);
+    //printDpTable(dpTable);
 
 
 
