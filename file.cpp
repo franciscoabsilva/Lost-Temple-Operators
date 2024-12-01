@@ -29,41 +29,26 @@ void buildExpression(const vector<vector<vector<int>>>& dpTable, int lin,
         return;
     }
     int parenthesis, leftResult, rightResult;
-    for(int i = 0; i < dpTable[lin][col].size(); i++) {
+    for(std::size_t i = 0; i < dpTable[lin][col].size(); i++) {
         if (dpTable[lin][col][i] == subResult) {
             parenthesis = dpTable[col][lin][3 * i]; 
             leftResult = dpTable[col][lin][3 * i + 1];  // Segundo elemento: resultado da esquerda
             rightResult = dpTable[col][lin][3 * i + 2]; // Terceiro elemento: resultado da direita
+            // Adiciona parêntese esquerdo
+            expression += "(";
+            buildExpression(dpTable, lin, parenthesis, leftResult, expression); // Recursão para o lado esquerdo
+            expression += " ";
+            // Adiciona parêntese direito
+            expression += "";
+            buildExpression(dpTable, parenthesis + 1, col, rightResult, expression); // Recursão para o lado direito
+            expression += ")";
             break;
         }
     }
 
-    // Adiciona parêntese esquerdo
-    expression += "(";
-    buildExpression(dpTable, lin, parenthesis, leftResult, expression); // Recursão para o lado esquerdo
-    expression += " ";
 
-    // Adiciona parêntese direito
-    expression += "";
-    buildExpression(dpTable, parenthesis + 1, col, rightResult, expression); // Recursão para o lado direito
-    expression += ")";
     
 }
-
-void printDpTable(const vector<vector<vector<int>>>& dpTable) {
-    // Imprimir a tabela dpTable para visualização
-    for (int i = 0; i < dpTable.size(); ++i) {
-        for (int j = 0; j < dpTable[i].size(); ++j) {
-            cout << "dpTable[" << i << "][" << j << "] = {";
-            for (int k = 0; k < dpTable[i][j].size(); ++k) {
-                cout << dpTable[i][j][k];
-                if (k != dpTable[i][j].size() - 1) cout << ", ";
-            }
-            cout << "}" << endl;
-        }
-    }
-}
-
 
 int main(int argc, char* argv[]) {
     ifstream inputFile(argv[1]);
@@ -98,7 +83,7 @@ int main(int argc, char* argv[]) {
                             continue;
                         }
                         dpTable[lin][col].push_back(subResult);
-                        int closeBracket = lin + i; // nao feito TODO ????
+                        int closeBracket = lin + i;
                         dpTable[col][lin].push_back(closeBracket);
                         dpTable[col][lin].push_back(leftResult);
                         dpTable[col][lin].push_back(rightResult);
@@ -112,16 +97,9 @@ int main(int argc, char* argv[]) {
             }
         }
     }
-    //printDpTable(dpTable);
-
-
-
-
-
-
 
     bool found = false;
-    for (int final = 0; final < dpTable[0][m - 1].size(); final++) {
+    for (std::size_t final = 0; final < dpTable[0][m - 1].size(); final++) {
         if (dpTable[0][m - 1][final] == result) {
             found = true;
             cout << "1" << endl;
@@ -132,7 +110,7 @@ int main(int argc, char* argv[]) {
         }
     }
     if (!found) {
-        printf("0\n");
+        cout << "0" << endl;
     }
     return 0; 
 }
