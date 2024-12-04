@@ -4,17 +4,16 @@
 using namespace std;
 
 void readInput(int n, int m, vector<vector<int>>& operationTable,
-               vector<int>& sequence, vector<vector<vector<int>>>& dpTable,
-               int& result) {
+               vector<vector<vector<int>>>& dpTable, int& result) {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             cin >> operationTable[i][j];
-
         }
     }
+    int value;
     for (int i = 0; i < m; i++) {
-        cin >> sequence[i];
-        dpTable[i][i].push_back(sequence[i]);
+        cin >> value;
+        dpTable[i][i].push_back(value);
     }
     cin >> result;
 }
@@ -52,10 +51,9 @@ int main() {
     cin >> n >> m;
 
     vector<vector<int>> operationTable(n, vector<int>(n));
-    vector<int> sequence(m);
     vector<vector<vector<int>>> dpTable(m, vector<vector<int>>(m)); 
 
-    readInput(n, m, operationTable, sequence, dpTable, result);
+    readInput(n, m, operationTable, dpTable, result);
 
     for (int diagonal = 1; diagonal < m; diagonal++) {
         for (int lin = 0; lin < m - diagonal; lin++) { // para cada celula
