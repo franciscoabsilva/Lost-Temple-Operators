@@ -54,18 +54,17 @@ int main() {
     vector<vector<vector<int>>> dpTable(m, vector<vector<int>>(m)); 
 
     readInput(n, m, operationTable, dpTable, result);
-
     for (int diagonal = 1; diagonal < m; diagonal++) {
-        for (int lin = 0; lin < m - diagonal; lin++) { // para cada celula
+        for (int lin = 0; lin < m - diagonal; lin++) { 
             int col = lin + diagonal;
             vector<bool> buffer(n, false); // buffer ocupa espaço mas é mais rapido
 
-            // provavelmente o solution counter ate podia sair se metessemos um vetor das solucoes
-            // de tamanho maximo n (ou n*4) e q qnd chegasse ao fim do vetor parava
-            int solutionCounter = 0; // isto podia ser um for loop ou while
-
+            int solutionCounter = 0; 
             for (int i = diagonal - 1; i >= 0; i--) { // para cada numero dentra celula
                 for (int leftResult : dpTable[lin][lin + i]) {
+                    if (solutionCounter == n) {
+                        break;
+                    }
                     for (int rightResult : dpTable[lin + i + 1][col]) {
                         if (solutionCounter == n) {
                             break;
@@ -83,9 +82,6 @@ int main() {
                         dpTable[col][lin].push_back(rightResult);
                         buffer[subResult-1] = true;
                         solutionCounter++;
-                    }
-                    if (solutionCounter == n) {
-                        break;
                     }
                 }
             }
@@ -107,7 +103,6 @@ int main() {
     if (!found) {
         cout << "0" << endl;
     }
-    
     return 0; 
 }
 
