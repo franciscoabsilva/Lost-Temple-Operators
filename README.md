@@ -17,15 +17,15 @@ The output will be printed to stdout.
 If the result is possible, the number 1 and the leftmost parenthesization is shown. If no valid parenthesization exists, the output will simply be 0.
 
 ### Example Input:
-3 6
-3 2 1
-3 2 1
-1 3 3
-2 2 2 2 1 3
+3 6\n
+3 2 1\n
+3 2 1\n
+1 3 3\n
+2 2 2 2 1 3\n
 1
 
 The output should be:
-1
+1\n
 ((((2 2) 2) (2 1)) 3)
 
 ## Compilation and Execution
