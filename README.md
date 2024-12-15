@@ -4,19 +4,18 @@ Initial Project for Analysis and Synthesis of Algorithms
 ## Introduction
 This project involves creating an algorithm to determine the correct parenthesization of a sequence of binary operations (⊕) to achieve a desired result, given a custom operation table and input sequence. The output should indicate if this is possible and provide the leftmost parenthesization.
 
-## Input
+## Input & Output
 The input file should be a .txt file that contain the following:
-
 - The first line contains an integer `n`, the number of elements in the custom operation table.
 - The next `n` lines contain `n` integers, each representing the result of a binary operation `⊕` between elements.
 - The next line contains a sequence of binary operations (⊕) that needs to be parenthesized.
 - The last line contains the expected result
+  
+The output will be printed to stdout and will contain the follow:
+-If the result is possible, the number 1 and the leftmost parenthesization is shown. 
+-If no valid parenthesization exists, the output will simply be 0.
 
-## Output
-The output will be printed to stdout.
-If the result is possible, the number 1 and the leftmost parenthesization is shown. If no valid parenthesization exists, the output will simply be 0.
-
-### Example Input:
+### Example:
 ```bash
 3 6
 3 2 1
