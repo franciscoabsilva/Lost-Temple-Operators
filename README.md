@@ -14,7 +14,7 @@ The input file should be a `.txt` file that contain the following:
   
 The output will be printed to stdout and will contain the follow:
 
-- If a valid parenthesization exists, the output will be number `1` and the leftmost parenthesization«. 
+- If a valid parenthesization exists, the output will be `1` and the leftmost parenthesization«. 
 - If no valid parenthesization exists, the output will be `0`.
 
 ### Example:
