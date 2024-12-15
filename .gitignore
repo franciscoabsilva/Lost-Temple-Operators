@@ -4,3 +4,4 @@
 *.in
 .vscode/settings.json
 *.png
+*.sh
